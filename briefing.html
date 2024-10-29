@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Briefing de Estratégia Digital</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; }
+    h1 { text-align: center; color: #333; }
+    label { display: block; margin-top: 20px; font-weight: bold; }
+    input[type="text"], textarea { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+    input[type="submit"], button { width: 100%; padding: 15px; background-color: #4CAF50; color: white; border: none; margin-top: 10px; cursor: pointer; }
+    button { margin-top: 10px; background-color: #ff6666; }
+    .table-container { margin-top: 50px; }
+    #whatsappContainer { display: none; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Briefing de Estratégia Digital</h1>
+    <form id="formulario">
+      <label for="diferencial">1. Qual é o principal diferencial do seu negócio em relação aos concorrentes?</label>
+      <textarea id="diferencial" name="diferencial" rows="4" required></textarea>
+
+      <label for="objetivos">2. Quais são os objetivos do seu negócio a curto, médio e longo prazo?</label>
+      <textarea id="objetivos" name="objetivos" rows="4" required></textarea>
+
+      <label>3. Quem são seus principais concorrentes?</label>
+      <input type="text" name="concorrente1" id="concorrente1" placeholder="Concorrente 1" required>
+      <input type="text" name="concorrente2" id="concorrente2" placeholder="Concorrente 2">
+      <input type="text" name="concorrente3" id="concorrente3" placeholder="Concorrente 3">
+
+      <label for="referencias">4. Cite profissionais de referência no seu nicho que você admira e comente sobre a atuação digital deles.</label>
+      <textarea id="referencias" name="referencias" rows="4" required></textarea>
+
+      <label>5. Você se sente confortável aparecendo nos Stories e gravando vídeos?</label>
+      <input type="radio" id="confortavel_sim" name="confortavel" value="Sim" required>
+      <label for="confortavel_sim">Sim</label><br>
+      <input type="radio" id="confortavel_nao" name="confortavel" value="Não">
+      <label for="confortavel_nao">Não</label><br>
+
+      <label for="dificuldade">6. Qual é a maior dificuldade do seu negócio que as redes sociais podem ajudar a resolver?</label>
+      <textarea id="dificuldade" name="dificuldade" rows="4" required></textarea>
+
+      <label for="reconhecimento">7. Como gostaria que sua empresa fosse reconhecida nas redes sociais?</label>
+      <textarea id="reconhecimento" name="reconhecimento" rows="4" required></textarea>
+
+      <label for="clienteIdeal">8. Descreva seu cliente ideal</label>
+      <textarea id="clienteIdeal" name="clienteIdeal" rows="4" required></textarea>
+
+      <label for="observacoes">Observações adicionais:</label>
+      <textarea id="observacoes" name="observacoes" rows="4"></textarea>
+
+      <input type="submit" value="Responder">
+      <button type="button" onclick="limparRespostas()">Limpar Respostas</button>
+    </form>
+
+    <div class="table-container" id="respostasContainer" style="display:none;">
+      <h2>Respostas Submetidas:</h2>
+      <pre id="respostasExibidas"></pre>
+    </div>
+
+    <div id="whatsappContainer">
+      <label for="whatsapp">Digite o número do WhatsApp (com DDD):</label>
+      <input type="text" id="whatsapp" placeholder="55 11 91234-5678" required>
+      <button type="button" onclick="enviarWhatsApp()">Enviar WhatsApp</button>
+    </div>
+  </div>
+
+  <script>
+    let respostas = [];
+
+    document.getElementById("formulario").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const resposta = {
+        diferencial: document.getElementById("diferencial").value,
+        objetivos: document.getElementById("objetivos").value,
+        concorrente1: document.getElementById("concorrente1").value,
+        concorrente2: document.getElementById("concorrente2").value,
+        concorrente3: document.getElementById("concorrente3").value,
+        referencias: document.getElementById("referencias").value,
+        confortavel: document.querySelector('input[name="confortavel"]:checked').value,
+        dificuldade: document.getElementById("dificuldade").value,
+        reconhecimento: document.getElementById("reconhecimento").value,
+        clienteIdeal: document.getElementById("clienteIdeal").value,
+        observacoes: document.getElementById("observacoes").value
+      };
+
+      // Adiciona a nova resposta ao array de respostas
+      respostas.push(resposta);
+      exibirRespostas();
+      document.getElementById("formulario").reset();
+      
+      // Mostra a seção para inserir o número do WhatsApp
+      document.getElementById("whatsappContainer").style.display = "block";
+    });
+
+    function exibirRespostas() {
+      const respostasExibidas = document.getElementById("respostasExibidas");
+      const respostasContainer = document.getElementById("respostasContainer");
+
+      // Monta uma string com as respostas formatadas
+      let respostasFormatadas = respostas.map((resposta, index) => `
+        Resposta ${index + 1}:
+        1. Diferencial: ${resposta.diferencial}
+        2. Objetivos: ${resposta.objetivos}
+        3. Concorrentes: ${resposta.concorrente1}, ${resposta.concorrente2 || ''}, ${resposta.concorrente3 || ''}
+        4. Referências: ${resposta.referencias}
+        5. Confortável em vídeos: ${resposta.confortavel}
+        6. Dificuldade: ${resposta.dificuldade}
+        7. Reconhecimento: ${resposta.reconhecimento}
+        8. Cliente Ideal: ${resposta.clienteIdeal}
+        Observações: ${resposta.observacoes || 'Nenhuma'}
+      `).join("\n");
+
+      respostasExibidas.textContent = respostasFormatadas;
+      respostasContainer.style.display = respostas.length > 0 ? 'block' : 'none';
+    }
+
+    function enviarWhatsApp() {
+      const whatsapp = document.getElementById("whatsapp").value;
+      if (whatsapp === "") {
+        alert("Por favor, insira um número de WhatsApp.");
+        return;
+      }
+
+      // Monta a mensagem que será enviada via WhatsApp
+      const mensagem = encodeURIComponent(respostas.map((resposta, index) => `
+        Resposta ${index + 1}:
+        1. Diferencial: ${resposta.diferencial}
+        2. Objetivos: ${resposta.objetivos}
+        3. Concorrentes: ${resposta.concorrente1}, ${resposta.concorrente2 || ''}, ${resposta.concorrente3 || ''}
+        4. Referências: ${resposta.referencias}
+        5. Confortável em vídeos: ${resposta.confortavel}
+        6. Dificuldade: ${resposta.dificuldade}
+        7. Reconhecimento: ${resposta.reconhecimento}
+        8. Cliente Ideal: ${resposta.clienteIdeal}
+        Observações: ${resposta.observacoes || 'Nenhuma'}
+      `).join("\n"));
+
+      const urlWhatsApp = `https://api.whatsapp.com/send?phone=${whatsapp}&text=${mensagem}`;
+
+      // Abre a URL do WhatsApp
+      window.open(urlWhatsApp, '_blank');
+    }
+
+    function limparRespostas() {
+      respostas = [];
+      exibirRespostas();
+      document.getElementById("whatsappContainer").style.display = "none"; // Esconde o campo de WhatsApp
+      alert("Respostas limpas com sucesso!");
+    }
+  </script>
+</body>
+</html
